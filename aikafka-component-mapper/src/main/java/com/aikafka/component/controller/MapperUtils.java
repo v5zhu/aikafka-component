@@ -1,4 +1,4 @@
-package com.aikafka.component.mapper.exec;
+package com.aikafka.component.controller;
 
 import com.aikafka.component.mapper.object.Course;
 import com.aikafka.component.mapper.object.Student;

@@ -21,6 +21,7 @@
 	<modules>
 		<module>aikafka-component-http</module>
 		<module>aikafka-component-mapper</module>
+		<module>aikafka-component-controller</module>
 	</modules>
 
 	<properties>

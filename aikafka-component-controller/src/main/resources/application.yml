@@ -1,0 +1,5 @@
+server:
+  port: 10000
+  context-path: /aikafka
+  tomcat:
+      uri-encoding: UTF-8
