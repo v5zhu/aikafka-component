@@ -1,4 +1,4 @@
-package com.aikafka.component;
+package com.aikafka.component.controller;
 
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;

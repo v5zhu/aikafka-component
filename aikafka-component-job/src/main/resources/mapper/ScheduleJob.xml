@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aikafka.component.job.dao.ScheduleJobDao">
+	<resultMap id="AttachInfoMap" type="com.aikafka.component.job.entity.ScheduleJob">
+	    <result property="jobId" column="job_id"/>
+	    <result property="jobName" column="job_name"/>
+	    <result property="jobGroup" column="job_group"/>
+	    <result property="jobStatus" column="job_status"/>
+	    <result property="cronExpression" column="cron_expression"/>
+	    <result property="isConcurrent" column="is_concurrent"/>
+		<result property="beanId" column="bean_id"/>
+		<result property="beanClass" column="bean_class"/>
+		<result property="methodName" column="method_name"/>
+		<result property="description" column="description"/>
+		<result property="createTime" column="create_time"/>
+	    <result property="updateTime" column="update_time"/>
+	</resultMap>
+
+	<insert id="insert" parameterType="com.aikafka.component.job.entity.ScheduleJob">
+		<![CDATA[
+			INSERT INTO t_b_schedule_job (
+			   job_id,
+			   job_name,
+			   job_group,
+			   job_status,
+			   cron_expression,
+			   is_concurrent,
+			   bean_id,
+			   bean_class,
+			   method_name,
+			   description,
+			   create_time,
+			   update_time)
+			VALUES (
+			    #{jobId},
+			    #{jobName},
+			    #{jobGroup},
+			    #{jobStatus},
+			    #{cronExpression},
+			    #{isConcurrent},
+			    #{beanId},
+			    #{beanClass},
+			    #{methodName},
+	       		#{description},
+	       		sysdate(),
+	       		sysdate()
+			  )
+		]]>
+	</insert>
+
+</mapper>

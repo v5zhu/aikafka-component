@@ -9,17 +9,22 @@
 	</parent>
 
 	<groupId>com.aikafka</groupId>
-	<artifactId>aikafka-component-controller</artifactId>
+	<artifactId>aikafka-component-job</artifactId>
 	<version>${aikafka.version}</version>
 	<packaging>jar</packaging>
 
-	<name>aikafka-component-controller</name>
+	<name>aikafka-component-job</name>
 	<description>Demo project for Spring Boot</description>
 	<dependencies>
 		<dependency>
-			<groupId>com.aikafka</groupId>
-			<artifactId>aikafka-component-mapper</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz-jobs</artifactId>
+			<version>2.3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springside</groupId>
@@ -31,6 +36,19 @@
 			<artifactId>dozer</artifactId>
 			<version>5.5.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>4.3.9.RELEASE</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -39,7 +57,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<mainClass>com.aikafka.component.controller.Application</mainClass>
+					<mainClass>com.aikafka.component.job.JobApplication</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>

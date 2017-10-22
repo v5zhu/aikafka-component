@@ -1,0 +1,15 @@
+server:
+  port: 11000
+  context-path: /aikafka
+  tomcat:
+      uri-encoding: UTF-8
+
+spring.datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://120.77.172.143:3306/touch6?autoReconnect=true
+    username: aikafka
+    password: 123456
+
+mybatis:
+  mapper-locations: classpath*:mapper/**/*.xml
