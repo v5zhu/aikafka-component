@@ -22,7 +22,7 @@ public class TaskUtils {
         Object object = null;
         Class clazz;
         if (StringUtils.isNotBlank(scheduleJob.getBeanClass())) {
-            object = SpringUtils.getBean(scheduleJob.getBeanClass());
+            object = SpringUtils.getBean(scheduleJob.getBeanId());
         } /*else if (StringUtils.isNotBlank(scheduleJob.getBeanClass())) {
             try {
 				clazz = Class.forName(scheduleJob.getBeanClass());
