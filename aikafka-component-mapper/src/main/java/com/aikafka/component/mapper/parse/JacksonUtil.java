@@ -12,7 +12,6 @@ import java.io.StringWriter;
 
 /**
  * XML相关的工具类
- * 项目名称:咪咕合管
  * 包名称: com.migu.tsg.pms.iodd.extenal.api.service.util
  * 类名称: JacksonMapperUtil
  * 类描述:

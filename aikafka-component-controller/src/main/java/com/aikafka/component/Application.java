@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * TODO〈一句话类描述〉
- * 项目名称:咪咕合管
  * 包名称: com.aikafka.component.mapper.exec
  * 类名称: Mapper
  * 类描述:

@@ -1,10 +1,10 @@
 package com.aikafka.component.mapper.object;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.Data;
 
 /**
  * TODO〈一句话类描述〉
- * 项目名称:咪咕合管
  * 包名称: com.aikafka.component.mapper.object
  * 类名称: Course
  * 类描述:
@@ -15,7 +15,9 @@ import lombok.Data;
 @Data
 public class Course {
 
+    @JacksonXmlProperty(localName = "Name")
     private String name;
 
+    @JacksonXmlProperty(localName = "Score")
     private int score;
 }

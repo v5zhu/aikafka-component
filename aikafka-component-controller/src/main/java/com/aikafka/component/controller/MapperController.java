@@ -1,13 +1,15 @@
 package com.aikafka.component.controller;
 
+import com.aikafka.component.mapper.object.Teacher;
+import com.aikafka.component.mapper.parse.JacksonUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * TODO〈一句话类描述〉
- * 项目名称:咪咕合管
  * 包名称: com.aikafka.component.controller
  * 类名称: MapperController
  * 类描述:
@@ -18,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MapperController {
 
-    @GetMapping("/test")
-    public ResponseEntity test() {
-        System.out.println(1234567);
-        return new ResponseEntity(1234, HttpStatus.OK);
+    @PostMapping("/getxml")
+    public ResponseEntity test(@RequestBody Teacher teacher) {
+        String xml = JacksonUtil.object2Xml(teacher);
+        return new ResponseEntity(xml, HttpStatus.OK);
     }
 }

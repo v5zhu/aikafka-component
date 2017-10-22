@@ -1,12 +1,13 @@
 package com.aikafka.component.mapper.object;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.Data;
 
 import java.util.List;
 
 /**
  * TODO〈一句话类描述〉
- * 项目名称:咪咕合管
  * 包名称: com.aikafka.component.mapper.object
  * 类名称: Student
  * 类描述:
@@ -16,9 +17,14 @@ import java.util.List;
  */
 @Data
 public class Student {
+
+    @JacksonXmlProperty(localName = "Name")
     private String name;
 
+    @JacksonXmlProperty(localName = "Age")
     private int age;
 
+    @JacksonXmlProperty(localName = "Course")
+    @JacksonXmlElementWrapper(useWrapping = false)
     private List<Course> courses;
 }
