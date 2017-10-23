@@ -19,4 +19,6 @@ public interface BeanService {
 
     String getClassFullName(String beanId);
 
+    List<String> methods(String beanId);
+
 }

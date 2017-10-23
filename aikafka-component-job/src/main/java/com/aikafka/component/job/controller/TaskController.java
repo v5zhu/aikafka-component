@@ -119,6 +119,7 @@ public class TaskController extends BaseController {
                                                            pageSize) {
         try {
             PageInfo<ScheduleJob> pageInfo = taskService.getAllTask(page, pageSize);
+            System.out.println(JSONObject.toJSONString(pageInfo));
             return new ResponseEntity<>(success(pageInfo), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();

@@ -55,4 +55,18 @@ public class BeanController extends BaseController {
             return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("bean/class/methods")
+    public ResponseEntity<JSONObject> listClassMethods(@RequestParam("beanName") String beanName) {
+        try {
+            List<String> names = beanService.methods(beanName);
+            return new ResponseEntity<>(success(names), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
