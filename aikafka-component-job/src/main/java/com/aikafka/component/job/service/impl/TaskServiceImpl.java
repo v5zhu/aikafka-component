@@ -129,22 +129,4 @@ public class TaskServiceImpl implements TaskService {
         }
         scheduleJobDao.updateByPrimaryKeySelective(job);
     }
-
-    /**
-     * 更改任务 cron表达式
-     *
-     * @throws Exception
-     */
-    @Override
-    public void updateCron(Long jobId) {
-        ScheduleJob job = scheduleJobDao.selectByPrimaryKey(jobId);
-        if (job == null) {
-            return;
-        }
-//        job.setCronExpression(cron);
-        if (ScheduleJob.STATUS_RUNNING.equals(job.getJobStatus())) {
-            jobService.updateJobCron(job);
-        }
-//        scheduleJobMapper.updateByPrimaryKeySelective(job);
-    }
 }

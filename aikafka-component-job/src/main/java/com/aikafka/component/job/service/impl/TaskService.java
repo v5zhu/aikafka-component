@@ -17,19 +17,18 @@ import java.util.List;
  * 版本： V1.0.0
  */
 public interface TaskService {
-    PageInfo<ScheduleJob> getAllTask(int page, int pageSize);
-
-    PageInfo<ScheduleJob> getTasks(String jobName, int page, int pageSize) throws Exception;
-
     void addTask(ScheduleJob jobDto);
 
     void editTask(ScheduleJob jobDto) throws Exception;
-
-    ScheduleJob getTaskById(Long jobId);
 
     void delTaskById(Long jobId) throws Exception;
 
     void changeStatus(Long jobId, String cmd);
 
-    void updateCron(Long jobId);
+    ScheduleJob getTaskById(Long jobId);
+
+    PageInfo<ScheduleJob> getTasks(String jobName, int page, int pageSize) throws Exception;
+
+    PageInfo<ScheduleJob> getAllTask(int page, int pageSize);
+
 }
