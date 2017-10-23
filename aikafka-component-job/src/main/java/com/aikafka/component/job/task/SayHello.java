@@ -1,5 +1,6 @@
 package com.aikafka.component.job.task;
 
+import com.aikafka.component.job.annotation.SelfDefinedBean;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.Date;
  * 版本： V1.0.0
  */
 @Component
+@SelfDefinedBean
 public class SayHello {
 
     public void say() {

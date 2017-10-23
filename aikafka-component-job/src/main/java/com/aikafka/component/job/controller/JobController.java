@@ -1,13 +1,18 @@
 package com.aikafka.component.job.controller;
 
+import com.aikafka.component.job.annotation.SelfDefinedBean;
 import com.aikafka.component.job.entity.ScheduleJob;
 import com.aikafka.component.job.service.impl.JobService;
+import com.aikafka.component.job.spring.utils.SpringUtils;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * TODO〈一句话类描述〉
@@ -28,6 +33,8 @@ public class JobController {
     @PostMapping("job/add")
     public ResponseEntity addJob(@RequestBody ScheduleJob job) {
         try {
+            Map map = SpringUtils.getApplicationContext().getBeansWithAnnotation(SelfDefinedBean.class);
+            System.out.println(JSONObject.toJSONString(map));
             jobService.addJob(job);
             return new ResponseEntity("success", HttpStatus.OK);
         } catch (RuntimeException e) {

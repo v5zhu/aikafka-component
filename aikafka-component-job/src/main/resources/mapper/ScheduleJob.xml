@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.aikafka.component.job.dao.ScheduleJobDao">
-	<resultMap id="AttachInfoMap" type="com.aikafka.component.job.entity.ScheduleJob">
+	<resultMap id="ScheduleJobMap" type="com.aikafka.component.job.entity.ScheduleJob">
 	    <result property="jobId" column="job_id"/>
 	    <result property="jobName" column="job_name"/>
 	    <result property="jobGroup" column="job_group"/>
@@ -47,5 +47,84 @@
 			  )
 		]]>
 	</insert>
+
+
+	<select id="selectByPrimaryKey" resultMap="ScheduleJobMap"
+			parameterType="java.lang.Long">
+		select
+			*
+		from t_b_schedule_job
+		where job_id = #{jobId,jdbcType=BIGINT}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+		delete from t_b_schedule_job
+		where job_id = #{jobId,jdbcType=BIGINT}
+	</delete>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.aikafka.component.job.entity.ScheduleJob">
+		update t_b_schedule_job
+		<set>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="jobName != null">
+				job_name = #{jobName,jdbcType=VARCHAR},
+			</if>
+			<if test="jobGroup != null">
+				job_group = #{jobGroup,jdbcType=VARCHAR},
+			</if>
+			<if test="jobStatus != null">
+				job_status = #{jobStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="cronExpression != null">
+				cron_expression = #{cronExpression,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="beanClass != null">
+				bean_class = #{beanClass,jdbcType=VARCHAR},
+			</if>
+			<if test="isConcurrent != null">
+				is_concurrent = #{isConcurrent,jdbcType=VARCHAR},
+			</if>
+			<if test="springId != null">
+				bean_id = #{beanId,jdbcType=VARCHAR},
+			</if>
+			<if test="methodName != null">
+				method_name = #{methodName,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where job_id = #{jobId,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.aikafka.component.job.entity.ScheduleJob">
+		update t_b_schedule_job
+		set create_time = #{createTime,jdbcType=TIMESTAMP},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		job_name = #{jobName,jdbcType=VARCHAR},
+		job_group = #{jobGroup,jdbcType=VARCHAR},
+		job_status = #{jobStatus,jdbcType=VARCHAR},
+		cron_expression = #{cronExpression,jdbcType=VARCHAR},
+		description = #{description,jdbcType=VARCHAR},
+		bean_class = #{beanClass,jdbcType=VARCHAR},
+		is_concurrent = #{isConcurrent,jdbcType=VARCHAR},
+		bean_id = #{beanId,jdbcType=VARCHAR},
+		method_name = #{methodName,jdbcType=VARCHAR}
+		where job_id = #{jobId,jdbcType=BIGINT}
+	</update>
+	<select id="getAll" resultMap="ScheduleJobMap">
+		select
+			*
+		from t_b_schedule_job
+	</select>
+	<select id="getTaskByContent" resultMap="ScheduleJobMap" parameterType="java.lang.String">
+		select
+			*
+		from t_b_schedule_job
+		where job_name LIKE CONCAT('%',#{jobName,jdbcType=VARCHAR},'%')
+	</select>
 
 </mapper>

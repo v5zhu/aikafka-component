@@ -3,6 +3,8 @@ package com.aikafka.component.job.dao;
 import com.aikafka.component.job.entity.ScheduleJob;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * TODO〈一句话类描述〉
  * 项目名称:咪咕合管
@@ -16,4 +18,16 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ScheduleJobDao {
     void insert(ScheduleJob job);
+
+    int deleteByPrimaryKey(Long jobId);
+
+    ScheduleJob selectByPrimaryKey(Long jobId);
+
+    int updateByPrimaryKeySelective(ScheduleJob record);
+
+    int updateByPrimaryKey(ScheduleJob record);
+
+    List<ScheduleJob> getAll();
+
+    List<ScheduleJob> getTaskByContent(String content);
 }

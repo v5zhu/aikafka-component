@@ -6,11 +6,17 @@ import com.aikafka.component.job.factory.QuartzJobFactoryAllowConcurrentExecutio
 import com.aikafka.component.job.factory.QuartzJobFactoryDisallowConcurrentExecution;
 import com.alibaba.fastjson.JSONObject;
 import org.quartz.*;
+import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
+import org.springside.modules.mapper.BeanMapper;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 定时任务调度工厂，用于管理job
@@ -39,12 +45,10 @@ public class JobServiceImpl implements JobService {
      * @param job
      */
     @Override
-//    @Trans
     public void addJob(ScheduleJob job) {
         if (job == null || !ScheduleJob.STATUS_RUNNING.equals(job.getJobStatus())) {
             return;
         }
-        scheduleJobDao.insert(job);
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         logger.info(scheduler + "添加任务:{}", JSONObject.toJSONString(job));
         TriggerKey triggerKey = TriggerKey.triggerKey(job.getJobName(), job.getJobGroup());
@@ -82,6 +86,195 @@ public class JobServiceImpl implements JobService {
             logger.error(e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 获取所有计划中的任务列表
+     *
+     * @return
+     * @throws SchedulerException
+     */
+    @Override
+    public List<ScheduleJob> getAllJob() {
+        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+        GroupMatcher<JobKey> matcher = GroupMatcher.anyJobGroup();
+        try {
+            Set<JobKey> jobKeys = scheduler.getJobKeys(matcher);
+            List<ScheduleJob> jobList = new ArrayList<ScheduleJob>();
+            for (JobKey jobKey : jobKeys) {
+                List<? extends Trigger> triggers = scheduler.getTriggersOfJob(jobKey);
+                for (Trigger trigger : triggers) {
+                    ScheduleJob job = new ScheduleJob();
+                    job.setJobName(jobKey.getName());
+                    job.setJobGroup(jobKey.getGroup());
+                    job.setDescription("触发器:" + trigger.getKey());
+                    Trigger.TriggerState triggerState = scheduler.getTriggerState(trigger.getKey());
+                    job.setJobStatus(triggerState.name());
+                    if (trigger instanceof CronTrigger) {
+                        CronTrigger cronTrigger = (CronTrigger) trigger;
+                        String cronExpression = cronTrigger.getCronExpression();
+                        job.setCronExpression(cronExpression);
+                    }
+                    jobList.add(job);
+                }
+            }
+            return BeanMapper.mapList(jobList, ScheduleJob.class);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+
+        }
+        return null;
+    }
+
+    /**
+     * 所有正在运行的job
+     *
+     * @return
+     * @throws SchedulerException
+     */
+    public List<ScheduleJob> getRunningJob() {
+        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+        try {
+            List<JobExecutionContext> executingJobs = scheduler.getCurrentlyExecutingJobs();
+            List<ScheduleJob> jobList = new ArrayList<ScheduleJob>(executingJobs.size());
+            for (JobExecutionContext executingJob : executingJobs) {
+                ScheduleJob job = new ScheduleJob();
+                JobDetail jobDetail = executingJob.getJobDetail();
+                JobKey jobKey = jobDetail.getKey();
+                Trigger trigger = executingJob.getTrigger();
+                job.setJobName(jobKey.getName());
+                job.setJobGroup(jobKey.getGroup());
+                job.setDescription("触发器:" + trigger.getKey());
+                Trigger.TriggerState triggerState = scheduler.getTriggerState(trigger.getKey());
+                job.setJobStatus(triggerState.name());
+                if (trigger instanceof CronTrigger) {
+                    CronTrigger cronTrigger = (CronTrigger) trigger;
+                    String cronExpression = cronTrigger.getCronExpression();
+                    job.setCronExpression(cronExpression);
+                }
+                jobList.add(job);
+            }
+            return BeanMapper.mapList(jobList, ScheduleJob.class);
+
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 暂停一个job
+     *
+     * @param scheduleJob
+     * @throws Exception
+     */
+    @Override
+    public void pauseJob(ScheduleJob job) throws Exception {
+        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+        JobKey jobKey = JobKey.jobKey(job.getJobGroup(), job.getJobName());
+        try {
+            scheduler.pauseJob(jobKey);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+            String[] infos = {job.getJobGroup(), job.getJobName(), e.getMessage()};
+            logger.error("停止任务:group [{}],name [{}] 失败,异常信息[{}]", infos);
+            throw new Exception("停止任务失败");
+        }
+    }
+
+    ;
+
+    /**
+     * 恢复一个job
+     *
+     * @param jobGroup
+     * @param jobName
+     * @throws SchedulerException
+     */
+    public void resumeJob(String jobGroup, String jobName) {
+        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+        JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+        try {
+            scheduler.resumeJob(jobKey);
+        } catch (SchedulerException e) {
+            //todo throw coreException
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * 删除一个job
+     *
+     * @param jobGroup
+     * @param jobName
+     * @throws SchedulerException
+     */
+    @Override
+    public void deleteJob(ScheduleJob job) {
+        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+        JobKey jobKey = JobKey.jobKey(job.getJobName(), job.getJobGroup());
+        try {
+            scheduler.deleteJob(jobKey);
+            logger.info("任务分组[{}],任务名称 = [{}]------------------已停止", job.getJobGroup(), job.getJobName());
+        } catch (SchedulerException e) {
+            //todo throw coreException
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * 立即执行job
+     *
+     * @param jobGroup
+     * @param jobName
+     * @throws SchedulerException
+     */
+    @Override
+    public void runAJobNow(String jobGroup, String jobName) {
+        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+        JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+        try {
+            scheduler.triggerJob(jobKey);
+        } catch (SchedulerException e) {
+            //todo throw coreException
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 更新job时间表达式
+     *
+     * @param scheduleJob
+     * @throws SchedulerException
+     */
+    @Override
+    public void updateJobCron(ScheduleJob scheduleJob) {
+        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+
+        TriggerKey triggerKey = TriggerKey.triggerKey(scheduleJob.getJobName(), scheduleJob.getJobGroup());
+
+        CronTrigger trigger = null;
+        try {
+            trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
+            CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(scheduleJob.getCronExpression());
+            trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
+            scheduler.rescheduleJob(triggerKey, trigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Boolean verifyCronExpression(String cronExpression) {
+        try {
+            CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
+        } catch (Exception e) {
+            logger.error("cron表达式有误，不能被解析！");
+            return false;
+        }
+        return true;
     }
 }
 

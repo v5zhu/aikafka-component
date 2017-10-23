@@ -2,6 +2,8 @@ package com.aikafka.component.job.service.impl;
 
 import com.aikafka.component.job.entity.ScheduleJob;
 
+import java.util.List;
+
 /**
  * TODO〈一句话类描述〉
  * 项目名称:咪咕合管
@@ -15,4 +17,16 @@ import com.aikafka.component.job.entity.ScheduleJob;
 public interface JobService {
 
     void addJob(ScheduleJob job);
+
+    List<ScheduleJob> getAllJob();
+
+    void pauseJob(ScheduleJob job) throws Exception;
+
+    void deleteJob(ScheduleJob job);
+
+    void runAJobNow(String jobGroup, String jobName);
+
+    void updateJobCron(ScheduleJob job);
+
+    Boolean verifyCronExpression(String cronExpression);
 }
