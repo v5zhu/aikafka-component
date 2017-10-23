@@ -4,6 +4,7 @@ import com.aikafka.component.job.BaseController;
 import com.aikafka.component.job.entity.ScheduleJob;
 import com.aikafka.component.job.service.impl.JobService;
 import com.aikafka.component.job.service.impl.TaskService;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,130 +31,130 @@ public class JobController extends BaseController {
     private TaskService taskService;
 
     @GetMapping("job/run")
-    public ResponseEntity runAJob(@RequestParam("jobId") Long jobId) {
+    public ResponseEntity<JSONObject> runAJob(@RequestParam("jobId") Long jobId) {
         try {
             jobService.runAJobNow(jobId);
-            return new ResponseEntity(success(), HttpStatus.OK);
+            return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("job/pause")
-    public ResponseEntity pauseAJob(@RequestParam("jobId") Long jobId) {
+    public ResponseEntity<JSONObject> pauseAJob(@RequestParam("jobId") Long jobId) {
         try {
             jobService.pauseJob(jobId);
-            return new ResponseEntity(success(), HttpStatus.OK);
+            return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("job/resume")
-    public ResponseEntity resumeAJob(@RequestParam("jobId") Long jobId) {
+    public ResponseEntity<JSONObject> resumeAJob(@RequestParam("jobId") Long jobId) {
         try {
             jobService.resumeJob(jobId);
-            return new ResponseEntity(success(), HttpStatus.OK);
+            return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("job/stop")
-    public ResponseEntity stopAJob(@RequestParam("jobId") Long jobId) {
+    public ResponseEntity<JSONObject> stopAJob(@RequestParam("jobId") Long jobId) {
         try {
             jobService.stopJob(jobId);
-            return new ResponseEntity(success(), HttpStatus.OK);
+            return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("job/init")
-    public ResponseEntity changeJobStatuc(@RequestParam("jobId") Long jobId) {
+    public ResponseEntity<JSONObject> changeJobStatuc(@RequestParam("jobId") Long jobId) {
         try {
             ScheduleJob job = taskService.getTaskById(jobId);
             jobService.addJob(job);
-            return new ResponseEntity(success(), HttpStatus.OK);
+            return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("job/updateCron")
-    public ResponseEntity updateCron(@RequestBody ScheduleJob job) {
+    public ResponseEntity<JSONObject> updateCron(@RequestBody ScheduleJob job) {
         try {
             taskService.editTask(job);
             jobService.updateJobCron(job);
-            return new ResponseEntity(success(), HttpStatus.OK);
+            return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("job/cron/verify")
-    public ResponseEntity verifyCron(@RequestParam("cron") String cron) {
+    public ResponseEntity<JSONObject> verifyCron(@RequestParam("cron") String cron) {
         try {
             jobService.verifyCronExpression(cron);
-            return new ResponseEntity(success(), HttpStatus.OK);
+            return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("job/all")
-    public ResponseEntity getAllJobs() {
+    public ResponseEntity<JSONObject> getAllJobs() {
         try {
             List<ScheduleJob> jobs = jobService.getAllJob();
-            return new ResponseEntity(success(jobs), HttpStatus.OK);
+            return new ResponseEntity<>(success(jobs), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("job/running")
-    public ResponseEntity getRunningJobs() {
+    public ResponseEntity<JSONObject> getRunningJobs() {
         try {
             List<ScheduleJob> jobs = jobService.getRunningJob();
-            return new ResponseEntity(success(jobs), HttpStatus.OK);
+            return new ResponseEntity<>(success(jobs), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -3,6 +3,7 @@ package com.aikafka.component.job.controller;
 import com.aikafka.component.job.BaseController;
 import com.aikafka.component.job.entity.ScheduleJob;
 import com.aikafka.component.job.service.impl.TaskService;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,104 +27,105 @@ public class TaskController extends BaseController {
     private TaskService taskService;
 
     @PostMapping("task/add")
-    public ResponseEntity addJob(@RequestBody ScheduleJob job) {
+    public ResponseEntity<JSONObject> addJob(@RequestBody ScheduleJob job) {
         try {
             taskService.addTask(job);
-            return new ResponseEntity(success(), HttpStatus.OK);
+            return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @PostMapping("task/edit")
-    public ResponseEntity editJob(@RequestBody ScheduleJob job) {
+    public ResponseEntity<JSONObject> editJob(@RequestBody ScheduleJob job) {
         try {
             taskService.editTask(job);
-            return new ResponseEntity(success(), HttpStatus.OK);
+            return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("task/delete")
-    public ResponseEntity deleteJob(@RequestParam("jobId") Long jobId) {
+    public ResponseEntity<JSONObject> deleteJob(@RequestParam("jobId") Long jobId) {
         try {
             taskService.delTaskById(jobId);
-            return new ResponseEntity(success(), HttpStatus.OK);
+            return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("task/switch")
-    public ResponseEntity changeJobStatuc(@RequestParam("jobId") Long jobId,
-                                          @RequestParam("cmd") String cmd) {
+    public ResponseEntity<JSONObject> changeJobStatuc(@RequestParam("jobId") Long jobId,
+                                                      @RequestParam("cmd") String cmd) {
         try {
             taskService.changeStatus(jobId, cmd);
-            return new ResponseEntity(success(), HttpStatus.OK);
+            return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("task/info")
-    public ResponseEntity changeJobStatuc(@RequestParam("jobId") Long jobId) {
+    public ResponseEntity<JSONObject> changeJobStatuc(@RequestParam("jobId") Long jobId) {
         try {
             ScheduleJob job = taskService.getTaskById(jobId);
-            return new ResponseEntity(success(job), HttpStatus.OK);
+            return new ResponseEntity<>(success(job), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("task/byname")
-    public ResponseEntity searchByName(@RequestParam("jobName") String jobName,
-                                       @RequestParam(value = "page", defaultValue = "1") int page,
-                                       @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+    public ResponseEntity<JSONObject> searchByName(@RequestParam("jobName") String jobName,
+                                                   @RequestParam(value = "page", defaultValue = "1") int page,
+                                                   @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         try {
-            PageInfo pageInfo = taskService.getTasks(jobName, page, pageSize);
-            return new ResponseEntity(success(pageInfo), HttpStatus.OK);
+            PageInfo<ScheduleJob> pageInfo = taskService.getTasks(jobName, page, pageSize);
+            return new ResponseEntity<>(success(pageInfo), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("task/all")
-    public ResponseEntity searchByName(@RequestParam(value = "page", defaultValue = "1") int page,
-                                       @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+    public ResponseEntity<JSONObject> searchByName(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                   @RequestParam(value = "pageSize", defaultValue = "10") int
+                                                           pageSize) {
         try {
-            PageInfo pageInfo = taskService.getAllTask(page, pageSize);
-            return new ResponseEntity(success(pageInfo), HttpStatus.OK);
+            PageInfo<ScheduleJob> pageInfo = taskService.getAllTask(page, pageSize);
+            return new ResponseEntity<>(success(pageInfo), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
