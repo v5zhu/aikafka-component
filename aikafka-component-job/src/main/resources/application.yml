@@ -13,3 +13,12 @@ spring.datasource:
 
 mybatis:
   mapper-locations: classpath*:mapper/**/*.xml
+
+quartz:
+  cluster: false
+  driver: com.mysql.jdbc.Driver
+  url: jdbc:mysql://120.77.172.143:3306/touch6?autoReconnect=true
+  username: aikafka
+  password: 123456
+  tablePrefix: t_b_qrtz_
+
