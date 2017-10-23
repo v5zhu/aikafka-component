@@ -121,7 +121,7 @@ public class TaskServiceImpl implements TaskService {
             return;
         }
         if ("stop".equals(cmd)) {
-            jobService.deleteJob(job);
+            jobService.stopJob(jobId);
             job.setJobStatus(ScheduleJob.STATUS_NOT_RUNNING);
         } else if ("start".equals(cmd)) {
             job.setJobStatus(ScheduleJob.STATUS_RUNNING);

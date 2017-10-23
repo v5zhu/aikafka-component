@@ -2,12 +2,14 @@ package com.aikafka.component.job.controller;
 
 import com.aikafka.component.job.BaseController;
 import com.aikafka.component.job.entity.ScheduleJob;
+import com.aikafka.component.job.service.impl.JobService;
 import com.aikafka.component.job.service.impl.TaskService;
-import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * TODO〈一句话类描述〉
@@ -20,15 +22,17 @@ import org.springframework.web.bind.annotation.*;
  * 版本： V1.0.0
  */
 @RestController
-public class TaskController extends BaseController {
+public class JobController extends BaseController {
 
+    @Autowired
+    private JobService jobService;
     @Autowired
     private TaskService taskService;
 
-    @PostMapping("task/add")
-    public ResponseEntity addJob(@RequestBody ScheduleJob job) {
+    @GetMapping("job/run")
+    public ResponseEntity runAJob(@RequestParam("jobId") Long jobId) {
         try {
-            taskService.addTask(job);
+            jobService.runAJobNow(jobId);
             return new ResponseEntity(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -39,10 +43,10 @@ public class TaskController extends BaseController {
         }
     }
 
-    @PostMapping("task/edit")
-    public ResponseEntity editJob(@RequestBody ScheduleJob job) {
+    @GetMapping("job/pause")
+    public ResponseEntity pauseAJob(@RequestParam("jobId") Long jobId) {
         try {
-            taskService.editTask(job);
+            jobService.pauseJob(jobId);
             return new ResponseEntity(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -53,10 +57,10 @@ public class TaskController extends BaseController {
         }
     }
 
-    @GetMapping("task/delete")
-    public ResponseEntity deleteJob(@RequestParam("jobId") Long jobId) {
+    @GetMapping("job/resume")
+    public ResponseEntity resumeAJob(@RequestParam("jobId") Long jobId) {
         try {
-            taskService.delTaskById(jobId);
+            jobService.resumeJob(jobId);
             return new ResponseEntity(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -67,11 +71,10 @@ public class TaskController extends BaseController {
         }
     }
 
-    @GetMapping("task/switch")
-    public ResponseEntity changeJobStatuc(@RequestParam("jobId") Long jobId,
-                                          @RequestParam("cmd") String cmd) {
+    @GetMapping("job/stop")
+    public ResponseEntity stopAJob(@RequestParam("jobId") Long jobId) {
         try {
-            taskService.changeStatus(jobId, cmd);
+            jobService.stopJob(jobId);
             return new ResponseEntity(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -82,11 +85,12 @@ public class TaskController extends BaseController {
         }
     }
 
-    @GetMapping("task/info")
+    @GetMapping("job/init")
     public ResponseEntity changeJobStatuc(@RequestParam("jobId") Long jobId) {
         try {
             ScheduleJob job = taskService.getTaskById(jobId);
-            return new ResponseEntity(success(job), HttpStatus.OK);
+            jobService.addJob(job);
+            return new ResponseEntity(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
             return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
@@ -96,13 +100,12 @@ public class TaskController extends BaseController {
         }
     }
 
-    @GetMapping("task/byname")
-    public ResponseEntity searchByName(@RequestParam("jobName") String jobName,
-                                       @RequestParam(value = "page", defaultValue = "1") int page,
-                                       @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+    @PostMapping("job/updateCron")
+    public ResponseEntity updateCron(@RequestBody ScheduleJob job) {
         try {
-            PageInfo pageInfo = taskService.getTasks(jobName, page, pageSize);
-            return new ResponseEntity(success(pageInfo), HttpStatus.OK);
+            taskService.editTask(job);
+            jobService.updateJobCron(job);
+            return new ResponseEntity(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
             return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
@@ -112,12 +115,39 @@ public class TaskController extends BaseController {
         }
     }
 
-    @GetMapping("task/all")
-    public ResponseEntity searchByName(@RequestParam(value = "page", defaultValue = "1") int page,
-                                       @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
+    @PostMapping("job/cron/verify")
+    public ResponseEntity verifyCron(@RequestParam("cron") String cron) {
         try {
-            PageInfo pageInfo = taskService.getAllTask(page, pageSize);
-            return new ResponseEntity(success(pageInfo), HttpStatus.OK);
+            jobService.verifyCronExpression(cron);
+            return new ResponseEntity(success(), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("job/all")
+    public ResponseEntity getAllJobs() {
+        try {
+            List<ScheduleJob> jobs = jobService.getAllJob();
+            return new ResponseEntity(success(jobs), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("job/running")
+    public ResponseEntity getRunningJobs() {
+        try {
+            List<ScheduleJob> jobs = jobService.getRunningJob();
+            return new ResponseEntity(success(jobs), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();
             return new ResponseEntity(failed(e.getMessage()), HttpStatus.BAD_REQUEST);

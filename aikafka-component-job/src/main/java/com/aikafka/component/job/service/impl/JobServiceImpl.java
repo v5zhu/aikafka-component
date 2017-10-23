@@ -132,6 +132,7 @@ public class JobServiceImpl implements JobService {
      * @return
      * @throws SchedulerException
      */
+    @Override
     public List<ScheduleJob> getRunningJob() {
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         try {
@@ -169,7 +170,11 @@ public class JobServiceImpl implements JobService {
      * @throws Exception
      */
     @Override
-    public void pauseJob(ScheduleJob job) throws Exception {
+    public void pauseJob(Long jobId) throws Exception {
+        ScheduleJob job = scheduleJobDao.selectByPrimaryKey(jobId);
+        if (job == null) {
+            throw new RuntimeException("参数错误");
+        }
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
         JobKey jobKey = JobKey.jobKey(job.getJobGroup(), job.getJobName());
         try {
@@ -187,13 +192,17 @@ public class JobServiceImpl implements JobService {
     /**
      * 恢复一个job
      *
-     * @param jobGroup
-     * @param jobName
+     * @param jobId
      * @throws SchedulerException
      */
-    public void resumeJob(String jobGroup, String jobName) {
+    @Override
+    public void resumeJob(Long jobId) {
+        ScheduleJob job = scheduleJobDao.selectByPrimaryKey(jobId);
+        if (job == null) {
+            throw new RuntimeException("参数错误");
+        }
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
-        JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+        JobKey jobKey = JobKey.jobKey(job.getJobName(), job.getJobGroup());
         try {
             scheduler.resumeJob(jobKey);
         } catch (SchedulerException e) {
@@ -204,27 +213,6 @@ public class JobServiceImpl implements JobService {
 
 
     /**
-     * 删除一个job
-     *
-     * @param jobGroup
-     * @param jobName
-     * @throws SchedulerException
-     */
-    @Override
-    public void deleteJob(ScheduleJob job) {
-        Scheduler scheduler = schedulerFactoryBean.getScheduler();
-        JobKey jobKey = JobKey.jobKey(job.getJobName(), job.getJobGroup());
-        try {
-            scheduler.deleteJob(jobKey);
-            logger.info("任务分组[{}],任务名称 = [{}]------------------已停止", job.getJobGroup(), job.getJobName());
-        } catch (SchedulerException e) {
-            //todo throw coreException
-            e.printStackTrace();
-        }
-
-    }
-
-    /**
      * 立即执行job
      *
      * @param jobGroup
@@ -232,9 +220,13 @@ public class JobServiceImpl implements JobService {
      * @throws SchedulerException
      */
     @Override
-    public void runAJobNow(String jobGroup, String jobName) {
+    public void runAJobNow(Long jobId) {
+        ScheduleJob job = scheduleJobDao.selectByPrimaryKey(jobId);
+        if (job == null) {
+            throw new RuntimeException("参数错误");
+        }
         Scheduler scheduler = schedulerFactoryBean.getScheduler();
-        JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+        JobKey jobKey = JobKey.jobKey(job.getJobName(), job.getJobGroup());
         try {
             scheduler.triggerJob(jobKey);
         } catch (SchedulerException e) {
@@ -267,14 +259,30 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
-    public Boolean verifyCronExpression(String cronExpression) {
+    public void verifyCronExpression(String cronExpression) {
         try {
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
         } catch (Exception e) {
             logger.error("cron表达式有误，不能被解析！");
-            return false;
+            throw new RuntimeException("cron表达式错误");
         }
-        return true;
+    }
+
+    @Override
+    public void stopJob(Long jobId) {
+        ScheduleJob job = scheduleJobDao.selectByPrimaryKey(jobId);
+        if (job == null) {
+            throw new RuntimeException("参数错误");
+        }
+        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+        JobKey jobKey = JobKey.jobKey(job.getJobName(), job.getJobGroup());
+        try {
+            scheduler.deleteJob(jobKey);
+            logger.info("任务分组[{}],任务名称 = [{}]------------------已停止", job.getJobGroup(), job.getJobName());
+        } catch (SchedulerException e) {
+            //todo throw coreException
+            e.printStackTrace();
+        }
     }
 }
 

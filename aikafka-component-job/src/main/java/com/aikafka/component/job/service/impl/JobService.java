@@ -20,13 +20,17 @@ public interface JobService {
 
     List<ScheduleJob> getAllJob();
 
-    void pauseJob(ScheduleJob job) throws Exception;
+    List<ScheduleJob> getRunningJob();
 
-    void deleteJob(ScheduleJob job);
+    void pauseJob(Long jobId) throws Exception;
 
-    void runAJobNow(String jobGroup, String jobName);
+    void resumeJob(Long jobId);
+
+    void runAJobNow(Long jobId);
 
     void updateJobCron(ScheduleJob job);
 
-    Boolean verifyCronExpression(String cronExpression);
+    void verifyCronExpression(String cronExpression);
+
+    void stopJob(Long jobId);
 }

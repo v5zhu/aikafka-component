@@ -12,7 +12,23 @@ import com.alibaba.fastjson.JSONObject;
  * 创建时间:2017/10/23
  * 版本： V1.0.0
  */
-public class BaseController {
+public class BaseController<T> {
+
+    protected static <T> JSONObject success(T data) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("success", "true");
+        jsonObject.put("code", 200);
+        jsonObject.put("data", data);
+        return jsonObject;
+    }
+
+    protected static <T> JSONObject failed(T data) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("success", "false");
+        jsonObject.put("code", -1);
+        jsonObject.put("data", data);
+        return jsonObject;
+    }
 
     protected static JSONObject success() {
         JSONObject jsonObject = new JSONObject();
