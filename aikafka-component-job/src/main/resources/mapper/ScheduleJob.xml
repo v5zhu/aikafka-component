@@ -120,7 +120,7 @@
 			*
 		from t_b_schedule_job
 	</select>
-	<select id="getTaskByContent" resultMap="ScheduleJobMap" parameterType="java.lang.String">
+	<select id="findTasksByJobName" resultMap="ScheduleJobMap" parameterType="java.lang.String">
 		select
 			*
 		from t_b_schedule_job

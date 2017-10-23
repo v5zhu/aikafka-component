@@ -29,5 +29,5 @@ public interface ScheduleJobDao {
 
     List<ScheduleJob> getAll();
 
-    List<ScheduleJob> getTaskByContent(String content);
+    List<ScheduleJob> findTasksByJobName(String content);
 }

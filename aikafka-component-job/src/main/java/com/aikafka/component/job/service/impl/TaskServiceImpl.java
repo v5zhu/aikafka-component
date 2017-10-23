@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.mapper.BeanMapper;
 
 import java.util.Date;
@@ -45,7 +46,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public PageInfo<ScheduleJob> getAllTask(int page, int pageSize) {
         //获取第1页，10条内容，默认查询总数count
-        PageHelper.startPage(page, pageSize);
+        PageHelper.startPage(page, pageSize, true);
         List<ScheduleJob> jobs = scheduleJobDao.getAll();
         //分页实现
         //或者使用PageInfo类（下面的例子有介绍）
@@ -57,8 +58,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public PageInfo<ScheduleJob> getTasks(String jobName, int page, int pageSize) throws Exception {
         //获取第1页，10条内容，默认查询总数count
-        PageHelper.startPage(page, pageSize);
-        List<ScheduleJob> jobs = scheduleJobDao.getTaskByContent(jobName);
+        PageHelper.startPage(page, pageSize, true);
+        List<ScheduleJob> jobs = scheduleJobDao.findTasksByJobName(jobName);
         //分页实现
         //或者使用PageInfo类（下面的例子有介绍）
         PageInfo<ScheduleJob> pageInfo = new PageInfo<ScheduleJob>(jobs);
@@ -71,6 +72,7 @@ public class TaskServiceImpl implements TaskService {
      * 添加到数据库中 区别于addJob
      */
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class})
     public void addTask(ScheduleJob jobDto) {
         ScheduleJob job = BeanMapper.map(jobDto, ScheduleJob.class);
         job.setCreateTime(new Date());
@@ -79,6 +81,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class})
     public void editTask(ScheduleJob jobDto) throws Exception {
         ScheduleJob job = scheduleJobDao.selectByPrimaryKey(jobDto.getJobId());
         Date date = job.getCreateTime();
@@ -100,6 +103,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class})
     public void delTaskById(Long jobId) throws Exception {
         scheduleJobDao.deleteByPrimaryKey(jobId);
     }
@@ -110,6 +114,7 @@ public class TaskServiceImpl implements TaskService {
      * @throws Exception
      */
     @Override
+    @Transactional(rollbackFor = {Exception.class,RuntimeException.class})
     public void changeStatus(Long jobId, String cmd) {
         ScheduleJob job = scheduleJobDao.selectByPrimaryKey(jobId);
         if (job == null) {
