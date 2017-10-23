@@ -69,7 +69,7 @@ public class TaskController extends BaseController {
     }
 
     @GetMapping("task/switch")
-    public ResponseEntity<JSONObject> changeJobStatuc(@RequestParam("jobId") Long jobId,
+    public ResponseEntity<JSONObject> changeJobStatus(@RequestParam("jobId") Long jobId,
                                                       @RequestParam("cmd") String cmd) {
         try {
             taskService.changeStatus(jobId, cmd);
@@ -84,7 +84,7 @@ public class TaskController extends BaseController {
     }
 
     @GetMapping("task/info")
-    public ResponseEntity<JSONObject> changeJobStatuc(@RequestParam("jobId") Long jobId) {
+    public ResponseEntity<JSONObject> getTaskById(@RequestParam("jobId") Long jobId) {
         try {
             ScheduleJob job = taskService.getTaskById(jobId);
             return new ResponseEntity<>(success(job), HttpStatus.OK);

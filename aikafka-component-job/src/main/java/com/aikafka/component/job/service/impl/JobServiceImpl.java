@@ -27,7 +27,7 @@ import java.util.Set;
  * 创建时间:2017/9/28
  * 版本： V1.0.0
  */
-@SuppressWarnings("SpringJavaAutowiringInspection")
+@SuppressWarnings("ALL")
 @Service
 public class JobServiceImpl implements JobService {
 
