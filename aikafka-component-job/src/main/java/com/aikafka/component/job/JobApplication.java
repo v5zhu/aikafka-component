@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
+import java.util.Properties;
+
 /**
  * TODO〈一句话类描述〉
  * 项目名称:咪咕合管
@@ -30,36 +32,45 @@ public class JobApplication {
     public SchedulerFactoryBean schedulerFactoryBean() {
         SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
         // 用于quartz集群,加载quartz数据源
-        /*
-         * Properties prop = new Properties(); prop.put("quartz.scheduler.instanceName", "MIGU-NET_PMS");
-         * prop.put("org.quartz.scheduler.instanceId", "AUTO"); prop.put("org.quartz.scheduler.skipUpdateCheck",
-         * "true"); prop.put("org.quartz.scheduler.jmx.export", "true");
-         *
-         * prop.put("org.quartz.jobStore.class", "org.quartz.impl.jdbcjobstore.JobStoreTX");
-         * prop.put("org.quartz.jobStore.driverDelegateClass", "org.quartz.impl.jdbcjobstore.StdJDBCDelegate");
-         * prop.put("org.quartz.jobStore.dataSource", "quartzDataSource"); prop.put("org.quartz.jobStore.tablePrefix",
-         * "T_B_QRTZ_"); prop.put("org.quartz.jobStore.isClustered", "true");
-         *
-         * prop.put("org.quartz.jobStore.clusterCheckinInterval", "20000"); prop.put("org.quartz.jobStore.dataSource",
-         * "myDS"); prop.put("org.quartz.jobStore.maxMisfiresToHandleAtATime", "1");
-         * prop.put("org.quartz.jobStore.misfireThreshold", "120000");
-         * prop.put("org.quartz.jobStore.txIsolationLevelSerializable", "true");
-         * prop.put("org.quartz.jobStore.selectWithLockSQL", "SELECT * FROM {0}LOCKS WHERE LOCK_NAME = ? FOR UPDATE");
-         *
-         * prop.put("org.quartz.threadPool.class", "org.quartz.simpl.SimpleThreadPool");
-         * prop.put("org.quartz.threadPool.threadCount", "10"); prop.put("org.quartz.threadPool.threadPriority", "5");
-         * prop.put("org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread", "true");
-         *
-         * prop.put("org.quartz.dataSource.myDS.driver", "com.mysql.jdbc.Driver");
-         * prop.put("org.quartz.dataSource.myDS.URL", "jdbc:mysql://localhost:3306/pms_dev?autoReconnect=true");
-         * prop.put("org.quartz.dataSource.myDS.user", "pms_dev"); prop.put("org.quartz.dataSource.myDS.password",
-         * "pms_dev"); prop.put("org.quartz.dataSource.myDS.maxConnections", 20);
-         *
-         * prop.put("org.quartz.plugin.triggHistory.class", "org.quartz.plugins.history.LoggingJobHistoryPlugin");
-         * prop.put("org.quartz.plugin.shutdownhook.class", "org.quartz.plugins.management.ShutdownHookPlugin");
-         * prop.put("org.quartz.plugin.shutdownhook.cleanShutdown", "true");
-         * schedulerFactoryBean.setQuartzProperties(prop);
-         */
+
+        Properties prop = new Properties();
+        prop.put("quartz.scheduler.instanceName", "MIGU-NET_PMS");
+        prop.put("org.quartz.scheduler.instanceId", "AUTO");
+        prop.put("org.quartz.scheduler.skipUpdateCheck",
+                "true");
+        prop.put("org.quartz.scheduler.jmx.export", "true");
+
+        prop.put("org.quartz.jobStore.class", "org.quartz.impl.jdbcjobstore.JobStoreTX");
+        prop.put("org.quartz.jobStore.driverDelegateClass", "org.quartz.impl.jdbcjobstore.StdJDBCDelegate");
+        prop.put("org.quartz.jobStore.dataSource", "quartzDataSource");
+        prop.put("org.quartz.jobStore.tablePrefix",
+                "T_B_QRTZ_");
+        prop.put("org.quartz.jobStore.isClustered", "true");
+
+        prop.put("org.quartz.jobStore.clusterCheckinInterval", "20000");
+        prop.put("org.quartz.jobStore.dataSource",
+                "myDS");
+        prop.put("org.quartz.jobStore.maxMisfiresToHandleAtATime", "1");
+        prop.put("org.quartz.jobStore.misfireThreshold", "120000");
+        prop.put("org.quartz.jobStore.txIsolationLevelSerializable", "true");
+        prop.put("org.quartz.jobStore.selectWithLockSQL", "SELECT * FROM {0}LOCKS WHERE LOCK_NAME = ? FOR UPDATE");
+
+        prop.put("org.quartz.threadPool.class", "org.quartz.simpl.SimpleThreadPool");
+        prop.put("org.quartz.threadPool.threadCount", "10");
+        prop.put("org.quartz.threadPool.threadPriority", "5");
+        prop.put("org.quartz.threadPool.threadsInheritContextClassLoaderOfInitializingThread", "true");
+
+        prop.put("org.quartz.dataSource.myDS.driver", "com.mysql.jdbc.Driver");
+        prop.put("org.quartz.dataSource.myDS.URL", "jdbc:mysql://120.77.172.143:3306/touch6?autoReconnect=true");
+        prop.put("org.quartz.dataSource.myDS.user", "aikafka");
+        prop.put("org.quartz.dataSource.myDS.password", "123456");
+        prop.put("org.quartz.dataSource.myDS.maxConnections", 20);
+
+        prop.put("org.quartz.plugin.triggHistory.class", "org.quartz.plugins.history.LoggingJobHistoryPlugin");
+        prop.put("org.quartz.plugin.shutdownhook.class", "org.quartz.plugins.management.ShutdownHookPlugin");
+        prop.put("org.quartz.plugin.shutdownhook.cleanShutdown", "true");
+        schedulerFactoryBean.setQuartzProperties(prop);
+
         return schedulerFactoryBean;
     }
 }
