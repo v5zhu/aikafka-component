@@ -26,4 +26,5 @@ public interface TaskService {
 
     PageInfo<ScheduleJob> getAllTask(int page, int pageSize);
 
+    ScheduleJob getTaskByGroupName(String jobGroup, String jobName);
 }

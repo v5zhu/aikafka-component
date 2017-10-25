@@ -29,6 +29,11 @@ public class TaskController extends BaseController {
     @PostMapping("task/add")
     public ResponseEntity<JSONObject> addJob(@RequestBody ScheduleJob job) {
         try {
+            //任务name  group 不能相同
+            ScheduleJob job1 = taskService.getTaskByGroupName(job.getJobGroup(), job.getJobName());
+            if (job1 != null) {
+                throw new RuntimeException("任务已存在");
+            }
             taskService.addTask(job);
             return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
@@ -43,6 +48,11 @@ public class TaskController extends BaseController {
     @PostMapping("task/edit")
     public ResponseEntity<JSONObject> editJob(@RequestBody ScheduleJob job) {
         try {
+            //任务name  group 不能相同
+            ScheduleJob job1 = taskService.getTaskByGroupName(job.getJobGroup(), job.getJobName());
+            if (job1 != null && job1.getJobId() != job.getJobId()) {
+                throw new RuntimeException("任务已存在");
+            }
             taskService.editTask(job);
             return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {

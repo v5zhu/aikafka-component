@@ -30,4 +30,6 @@ public interface ScheduleJobDao {
     List<ScheduleJob> getAll();
 
     List<ScheduleJob> findTasksByJobName(String content);
+
+    ScheduleJob findByGroupName(String jobGroup, String jobName);
 }

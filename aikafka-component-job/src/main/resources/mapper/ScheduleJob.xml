@@ -126,5 +126,8 @@
 		from t_b_schedule_job
 		where job_name LIKE CONCAT('%',#{jobName,jdbcType=VARCHAR},'%')
 	</select>
+	<select id="findByGroupName" resultType="com.aikafka.component.job.entity.ScheduleJob">
+		SELECT * FROM t_b_schedule_job WHERE job_group=#{jobGroup} and job_name=#{jobName}
+	</select>
 
 </mapper>

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springside.modules.mapper.BeanMapper;
 
 import java.util.Date;
 import java.util.List;
@@ -53,6 +52,12 @@ public class TaskServiceImpl implements TaskService {
         PageInfo<ScheduleJob> pageInfo = new PageInfo<ScheduleJob>(jobs);
 
         return pageInfo;
+    }
+
+    @Override
+    public ScheduleJob getTaskByGroupName(String jobGroup, String jobName) {
+        ScheduleJob job = scheduleJobDao.findByGroupName(jobGroup, jobName);
+        return job;
     }
 
     @Override
