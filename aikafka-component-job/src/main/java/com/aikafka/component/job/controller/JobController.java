@@ -1,6 +1,7 @@
 package com.aikafka.component.job.controller;
 
 import com.aikafka.component.job.BaseController;
+import com.aikafka.component.job.constant.DataDict;
 import com.aikafka.component.job.entity.ScheduleJob;
 import com.aikafka.component.job.service.impl.JobService;
 import com.aikafka.component.job.service.impl.TaskService;
@@ -30,9 +31,29 @@ public class JobController extends BaseController {
     @Autowired
     private TaskService taskService;
 
+    @GetMapping("job/join")
+    public ResponseEntity<JSONObject> join(@RequestParam("jobId") Long jobId) {
+        try {
+            ScheduleJob job = taskService.getTaskById(jobId);
+            job.setJobStatus(DataDict.JobStatus.RUNNING);
+            taskService.editTask(job);
+            jobService.join(job);
+            return new ResponseEntity<>(success(), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("job/run")
     public ResponseEntity<JSONObject> runAJob(@RequestParam("jobId") Long jobId) {
         try {
+            ScheduleJob job = taskService.getTaskById(jobId);
+            job.setJobStatus(DataDict.JobStatus.RUNNING);
+            taskService.editTask(job);
             jobService.runAJobNow(jobId);
             return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
@@ -47,6 +68,9 @@ public class JobController extends BaseController {
     @GetMapping("job/pause")
     public ResponseEntity<JSONObject> pauseAJob(@RequestParam("jobId") Long jobId) {
         try {
+            ScheduleJob job = taskService.getTaskById(jobId);
+            job.setJobStatus(DataDict.JobStatus.PAUSE);
+            taskService.editTask(job);
             jobService.pauseJob(jobId);
             return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
@@ -61,6 +85,9 @@ public class JobController extends BaseController {
     @GetMapping("job/resume")
     public ResponseEntity<JSONObject> resumeAJob(@RequestParam("jobId") Long jobId) {
         try {
+            ScheduleJob job = taskService.getTaskById(jobId);
+            job.setJobStatus(DataDict.JobStatus.RUNNING);
+            taskService.editTask(job);
             jobService.resumeJob(jobId);
             return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
@@ -75,22 +102,10 @@ public class JobController extends BaseController {
     @GetMapping("job/stop")
     public ResponseEntity<JSONObject> stopAJob(@RequestParam("jobId") Long jobId) {
         try {
-            jobService.stopJob(jobId);
-            return new ResponseEntity<>(success(), HttpStatus.OK);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("job/init")
-    public ResponseEntity<JSONObject> changeJobStatuc(@RequestParam("jobId") Long jobId) {
-        try {
             ScheduleJob job = taskService.getTaskById(jobId);
-            jobService.addJob(job);
+            job.setJobStatus(DataDict.JobStatus.STOP);
+            taskService.editTask(job);
+            jobService.stopJob(jobId);
             return new ResponseEntity<>(success(), HttpStatus.OK);
         } catch (RuntimeException e) {
             e.printStackTrace();

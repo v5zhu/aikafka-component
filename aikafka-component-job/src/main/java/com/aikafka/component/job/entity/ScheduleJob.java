@@ -1,5 +1,6 @@
 package com.aikafka.component.job.entity;
 
+import com.aikafka.component.job.constant.DataDict;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,8 +13,6 @@ import java.util.Date;
 @Data
 public class ScheduleJob implements Serializable {
 
-    public static final String STATUS_RUNNING = "1";
-    public static final String STATUS_NOT_RUNNING = "0";
     private Long jobId;
     /**
      * 任务名称
@@ -26,7 +25,7 @@ public class ScheduleJob implements Serializable {
     /**
      * 任务状态 是否启动任务
      */
-    private String jobStatus;
+    private String jobStatus = DataDict.JobStatus.INITIAL;
     /**
      * cron表达式
      */
@@ -34,7 +33,7 @@ public class ScheduleJob implements Serializable {
     /**
      * 任务是否有状态
      */
-    private boolean isConcurrent;
+    private boolean isConcurrent = false;
     /**
      * 任务描述
      */
@@ -52,7 +51,7 @@ public class ScheduleJob implements Serializable {
      */
     private String methodName;
 
-    private Date createTime;
+    private Date createTime = new Date();
 
-    private Date updateTime;
+    private Date updateTime = new Date();
 }

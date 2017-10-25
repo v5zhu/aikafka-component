@@ -68,21 +68,6 @@ public class TaskController extends BaseController {
         }
     }
 
-    @GetMapping("task/switch")
-    public ResponseEntity<JSONObject> changeJobStatus(@RequestParam("jobId") Long jobId,
-                                                      @RequestParam("cmd") String cmd) {
-        try {
-            taskService.changeStatus(jobId, cmd);
-            return new ResponseEntity<>(success(), HttpStatus.OK);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(failed(e.getMessage()), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(exception(), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
     @GetMapping("task/info")
     public ResponseEntity<JSONObject> getTaskById(@RequestParam("jobId") Long jobId) {
         try {

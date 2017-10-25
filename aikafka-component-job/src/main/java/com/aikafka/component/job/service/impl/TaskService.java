@@ -3,9 +3,6 @@ package com.aikafka.component.job.service.impl;
 import com.aikafka.component.job.entity.ScheduleJob;
 import com.github.pagehelper.PageInfo;
 
-import javax.annotation.PostConstruct;
-import java.util.List;
-
 /**
  * TODO〈一句话类描述〉
  * 项目名称:咪咕合管
@@ -22,8 +19,6 @@ public interface TaskService {
     void editTask(ScheduleJob jobDto) throws Exception;
 
     void delTaskById(Long jobId) throws Exception;
-
-    void changeStatus(Long jobId, String cmd);
 
     ScheduleJob getTaskById(Long jobId);
 

@@ -73,23 +73,15 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class})
-    public void addTask(ScheduleJob jobDto) {
-        ScheduleJob job = BeanMapper.map(jobDto, ScheduleJob.class);
+    public void addTask(ScheduleJob job) {
         job.setCreateTime(new Date());
-        job.setJobStatus("0");
         scheduleJobDao.insert(job);
     }
 
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class})
-    public void editTask(ScheduleJob jobDto) throws Exception {
-        ScheduleJob job = scheduleJobDao.selectByPrimaryKey(jobDto.getJobId());
-        Date date = job.getCreateTime();
-        String jobStatus = job.getJobStatus();
+    public void editTask(ScheduleJob job) throws Exception {
 
-        BeanMapper.copy(jobDto, job);
-        job.setCreateTime(date);
-        job.setJobStatus(jobStatus);
         job.setUpdateTime(new Date());
         scheduleJobDao.updateByPrimaryKey(job);
     }
@@ -99,34 +91,12 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public ScheduleJob getTaskById(Long jobId) {
-        return BeanMapper.map(scheduleJobDao.selectByPrimaryKey(jobId), ScheduleJob.class);
+        return scheduleJobDao.selectByPrimaryKey(jobId);
     }
 
     @Override
     @Transactional(rollbackFor = {Exception.class,RuntimeException.class})
     public void delTaskById(Long jobId) throws Exception {
         scheduleJobDao.deleteByPrimaryKey(jobId);
-    }
-
-    /**
-     * 更改任务状态
-     *
-     * @throws Exception
-     */
-    @Override
-    @Transactional(rollbackFor = {Exception.class,RuntimeException.class})
-    public void changeStatus(Long jobId, String cmd) {
-        ScheduleJob job = scheduleJobDao.selectByPrimaryKey(jobId);
-        if (job == null) {
-            return;
-        }
-        if ("stop".equals(cmd)) {
-            jobService.stopJob(jobId);
-            job.setJobStatus(ScheduleJob.STATUS_NOT_RUNNING);
-        } else if ("start".equals(cmd)) {
-            job.setJobStatus(ScheduleJob.STATUS_RUNNING);
-            jobService.addJob(job);
-        }
-        scheduleJobDao.updateByPrimaryKeySelective(job);
     }
 }

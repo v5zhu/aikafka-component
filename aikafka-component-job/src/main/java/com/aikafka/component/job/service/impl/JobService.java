@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface JobService {
 
-    void addJob(ScheduleJob job);
+    void join(ScheduleJob job);
 
     List<ScheduleJob> getAllJob();
 

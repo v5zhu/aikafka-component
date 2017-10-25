@@ -1,5 +1,6 @@
 package com.aikafka.component.job.service.impl;
 
+import com.aikafka.component.job.constant.DataDict;
 import com.aikafka.component.job.dao.ScheduleJobDao;
 import com.aikafka.component.job.entity.ScheduleJob;
 import com.aikafka.component.job.factory.QuartzJobFactoryAllowConcurrentExecution;
@@ -45,8 +46,8 @@ public class JobServiceImpl implements JobService {
      * @param job
      */
     @Override
-    public void addJob(ScheduleJob job) {
-        if (job == null || !ScheduleJob.STATUS_RUNNING.equals(job.getJobStatus())) {
+    public void join(ScheduleJob job) {
+        if (job == null || !DataDict.JobStatus.RUNNING.equals(job.getJobStatus())) {
             return;
         }
         Scheduler scheduler = schedulerFactoryBean.getScheduler();

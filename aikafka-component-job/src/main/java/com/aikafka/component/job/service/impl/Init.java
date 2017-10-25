@@ -42,7 +42,7 @@ public class Init {
         List<ScheduleJob> jobList = scheduleJobDao.getAll();
 
         for (ScheduleJob job : jobList) {
-            jobService.addJob(job);
+            jobService.join(job);
         }
     }
 }
