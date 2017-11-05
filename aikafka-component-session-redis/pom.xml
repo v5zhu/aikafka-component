@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>aikafka-component</artifactId>
+        <groupId>com.aikafka</groupId>
+        <version>AIKAFKA_VERSION</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>aikafka-component-session-redis</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.aikafka</groupId>
+            <artifactId>aikafka-component-redis-client</artifactId>
+            <version>AIKAFKA_VERSION</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session -->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis -->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

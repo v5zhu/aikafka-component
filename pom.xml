@@ -23,6 +23,11 @@
 		<module>aikafka-component-mapper</module>
 		<module>aikafka-component-controller</module>
 		<module>aikafka-component-job</module>
+		<module>aikafka-component-safeguarding</module>
+		<module>aikafka-component-ftp</module>
+		<module>aikafka-component-sftp</module>
+		<module>aikafka-component-redis-client</module>
+		<module>aikafka-component-session-redis</module>
 	</modules>
 
 	<properties>
