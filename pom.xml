@@ -28,6 +28,10 @@
 		<module>aikafka-component-sftp</module>
 		<module>aikafka-component-redis-client</module>
 		<module>aikafka-component-session-redis</module>
+		<module>aikafka-component-rabbitmq</module>
+		<module>aikafka-component-mongodb</module>
+		<module>aikafka-component-lucene</module>
+		<module>aikafka-component-solr</module>
 	</modules>
 
 	<properties>
