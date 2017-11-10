@@ -1,6 +1,8 @@
 package com.aikafka.component.rabbitmq.send;
 
 import com.aikafka.component.rabbitmq.config.AmqpConfig;
+import com.aikafka.component.rabbitmq.fanout.FanoutSender;
+import com.aikafka.component.rabbitmq.topic.TopicSender;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,15 +28,14 @@ public class RabbitmqClient implements RabbitTemplate.ConfirmCallback {
     @Autowired
     @Qualifier("amqpConfig")
     private AmqpConfig config;
-
-    public void send(Object message) {
-        CorrelationData correlationId = new CorrelationData(UUID.randomUUID().toString());
-        rabbitTemplate.convertAndSend(config.getExchange(), config.getRoutingKey(), message, correlationId);
-    }
+    @Autowired
+    private TopicSender sender;
+    @Autowired
+    private FanoutSender fanoutSender;
 
     @Scheduled(cron = "0/2 * * * * ?")
     public void test() {
-        this.send("测试消息队列");
+        this.fanoutSender.send();
     }
 
     @Override

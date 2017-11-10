@@ -18,6 +18,3 @@ rabbitmq:
   password: admin123
   virtual-host: aikafka-vh
   publisher-confirms: true
-  queueName: aikafka-queue
-  exchange: aikafka-exchange
-  routingKey: aikafka-routingKey

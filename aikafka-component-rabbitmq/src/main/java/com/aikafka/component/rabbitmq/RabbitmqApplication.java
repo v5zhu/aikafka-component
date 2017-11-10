@@ -56,27 +56,4 @@ public class RabbitmqApplication {
         RabbitTemplate template = new RabbitTemplate(connectionFactory(config));
         return template;
     }
-
-    @Bean
-    public Binding binding(@Qualifier("amqpConfig")AmqpConfig config) {
-        Queue queue=new Queue(config.getQueueName(),true);
-        Exchange exchange=new TopicExchange(config.getExchange());
-        return BindingBuilder.bind(queue).to(exchange).with(config.getRoutingKey()).noargs();
-    }
-
-    @Bean
-    public SimpleMessageListenerContainer messageContainer(@Qualifier("amqpConfig") AmqpConfig config) {
-        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer(connectionFactory(config));
-        container.setQueues(new Queue(config.getQueueName(),true));
-        container.setExposeListenerChannel(true);
-        container.setMaxConcurrentConsumers(10);
-        container.setConcurrentConsumers(5);
-        container.setAcknowledgeMode(AcknowledgeMode.MANUAL); //设置确认模式手工确认
-        container.setMessageListener((ChannelAwareMessageListener) (message, channel) -> {
-            byte[] body = message.getBody();
-            System.out.println("receive msg : " + new String(body));
-            channel.basicAck(message.getMessageProperties().getDeliveryTag(), true); //确认消息成功消费
-        });
-        return container;
-    }
 }

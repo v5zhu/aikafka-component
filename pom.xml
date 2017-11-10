@@ -32,6 +32,7 @@
 		<module>aikafka-component-mongodb</module>
 		<module>aikafka-component-lucene</module>
 		<module>aikafka-component-solr</module>
+		<module>aikafka-component-spring-mail</module>
 	</modules>
 
 	<properties>

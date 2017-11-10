@@ -31,11 +31,4 @@ public class AmqpConfig {
 
     private boolean publisherConfirms;
 
-    private String queueName;
-
-    private String exchangeType;
-
-    private String exchange;
-
-    private String routingKey;
 }
