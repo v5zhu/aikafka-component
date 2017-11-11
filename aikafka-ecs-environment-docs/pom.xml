@@ -9,11 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>aikafka-ecs-environment</artifactId>
+    <artifactId>aikafka-ecs-environment-docs</artifactId>
     <packaging>pom</packaging>
-    <modules>
-        <module>aikafka-ecs-ftp</module>
-    </modules>
 
 
 </project>
