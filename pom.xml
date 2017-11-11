@@ -33,7 +33,8 @@
 		<module>aikafka-component-lucene</module>
 		<module>aikafka-component-solr</module>
 		<module>aikafka-component-spring-mail</module>
-	</modules>
+        <module>aikafka-ecs-environment</module>
+    </modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
