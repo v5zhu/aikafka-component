@@ -7,12 +7,13 @@ server:
 spring.datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://120.77.172.143:3306/touch6?autoReconnect=true
+    url: jdbc:mysql://47.96.28.236:3306/aikafka?autoReconnect=true
     username: aikafka
     password: 123456
 
 rabbitmq:
-  address: 120.77.172.143
+#  address: 120.77.172.143
+  address: 47.96.28.236
   port: 15672
   username: admin
   password: admin123
