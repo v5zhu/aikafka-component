@@ -6,25 +6,21 @@ wget https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-rhel70-3.2.4.tgz
 ```
 tar -zxvf mongodb-linux-x86_64-rhel70-3.2.4.tgz
 ```
-- 3.创建mongodb安装目录
-```
-mkdir -p /usr/local/mongodb
- ```
-- 4.将解压的mongodb文件夹整体复制到上面安装目录
+- 3.将解压的mongodb文件夹整体复制到/usr/local/mongodb安装目录
 ```BASH
 mv mongodb-linux-x86_64-rhel70-3.2.4 mongodb
 mv  mongodb /usr/local/
 ```
-- 5.在mongodb目录创建logs目录用于存放日志
+- 4.在mongodb目录创建logs目录用于存放日志
 ```bash
 cd /usr/local/mongodb
 mkdir logs
 ```
-- 6.在mongodb目录创建db目录用于存放数据
+- 5.在mongodb目录创建db目录用于存放数据
 ```bash
 mkdir db
 ```
-- 7.创建mongodb/bin/mongodb.conf文件并写入如下内容：
+- 6.创建/usr/local/mongodb/mongodb.conf文件并写入如下内容：
 ```text
 # idae - MongoDB config start - 2017-11-10
 
@@ -67,16 +63,29 @@ nohttpinterface = true
 ```
 - 8.启动 mongodb 服务
 ```bash
-./bin/mongod --config bin/mongodb.conf 
+$ ./bin/mongod --config mongodb.conf 
+about to fork child process, waiting until server is ready for connections.
+forked process: 29627
+child process started successfully, parent exiting
 ```
 - 9.查看端口27017是否已启动
 ```bash
-[root@aikafka mongodb]# netstat -lanp | grep 27017
+$ netstat -lanp | grep 27017
 tcp        0      0 0.0.0.0:27017           0.0.0.0:*               LISTEN      12804/./bin/mongod  
 unix  2      [ ACC ]     STREAM     LISTENING     645556   12804/./bin/mongod   /tmp/mongodb-27017.sock
 ```
 - 10.将 mongodb 服务加入到自启动文件中
 ```bash
 vi /etc/rc.local 
-/usr/local/mongodb/bin/mongod --config /usr/local/mongodb/bin/mongodb.conf
+/usr/local/mongodb/bin/mongod --config /usr/local/mongodb/mongodb.conf
 ```
+- 11.测试连接
+    - 下载或启动Studio 3T
+    - 创建连接
+    ```bash
+    server          xxx.xx.28.xxx
+    port            27017
+    authentication  保持默认None
+    # 此处可能会连接不上，依然是阿里云未开放27017端口，请自行开放
+    ```
+    - 继续连接测试（端口开放即可连接成功）
