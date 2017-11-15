@@ -34,7 +34,10 @@
 		<module>aikafka-component-solr</module>
 		<module>aikafka-component-spring-mail</module>
         <module>aikafka-ecs-environment-docs</module>
-    </modules>
+		<module>aikafka-dev-java8</module>
+		<module>aikafka-component-kafka</module>
+		<module>aikafka-app-docs</module>
+	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
